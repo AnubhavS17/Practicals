@@ -1,0 +1,81 @@
+
+//DropDown
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+public class STQA_P9A {
+   public static void main(String[] args) throws InterruptedException {
+       // Set the path for the ChromeDriver executable
+       System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+       // Create a new instance of ChromeDriver
+       WebDriver driver = new ChromeDriver();
+       try {
+           // Navigate to the BlazeDemo website
+           driver.get("https://blazedemo.com/");
+           // Select departure city
+           Select s = new Select(driver.findElement(By.name("fromPort")));
+           s.selectByVisibleText("Boston");
+           // Select destination city
+           Select t = new Select(driver.findElement(By.name("toPort")));
+           t.selectByVisibleText("London");
+           System.out.println("Element selected successfully!");
+       } catch (Exception e) {
+           System.out.println("Something went wrong: " + e);
+       }
+   }
+}
+
+
+
+//html code for the ListBox
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo MultiSelect</title>
+</head>
+<body>
+    <h2>Demo MultiSelect</h2>
+    <select id="car" name="car" multiple size="4">
+        <option value="1">Ford</option>
+        <option value="2">Audi</option>
+        <option value="3">Bugatti</option>
+        <option value="4">Ferrari</option>
+    </select>
+</body>
+</html>
+
+
+//ListBox Code
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+// import org.openqa.selenium.firefox.FirefoxDriver;
+// Comment the above line and uncomment the below line to use Chrome
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+public class STQA_9B {
+   public static void main(String[] args) throws InterruptedException {
+       System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+       WebDriver wd = new ChromeDriver();
+       wd.get("file:C://Users//rahul suwasiya//Downloads//DemoFile.html");
+       Select s = new Select(wd.findElement(By.id("car")));
+       Thread.sleep(2000);
+       if (s.isMultiple()) {
+           s.selectByIndex(1);
+           s.selectByValue("3");
+           s.selectByVisibleText("Ferrari");
+           Thread.sleep(2000);
+           // s.deselectByIndex(1);
+           //s.deselectAll();
+       }
+   }
+}
+
