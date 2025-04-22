@@ -1,0 +1,41 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+import java.util.List;
+public class STQA_P5 {
+   public static void main(String[] args) {
+       // Set the path to the ChromeDriver executable
+       System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+       // Initialize WebDriver
+       WebDriver wd = new ChromeDriver();
+       WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(33));
+       try {
+           // Navigate to the test page
+           wd.get("http://demo.guru99.com/test/ajax.html");
+           // Wait for and click the "no" radio button
+           WebElement noRadioButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("no")));
+           noRadioButton.click();
+           // Wait for and click the "Check" button
+           WebElement checkButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("b
+uttoncheck")));
+           checkButton.click();           // Wait for the radio buttons to be present and retrieve them
+           List<WebElement> elements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.name("name")));
+           System.out.println("Number of elements: " + elements.size());
+           // Iterate through the list of radio buttons and print their values
+           for (WebElement element : elements) {
+               System.out.println("Radio button text: " + element.getAttribute("value"));
+           }
+           // Keep the browser open for debugging (adjust sleep time if needed)
+           Thread.sleep(10000);
+       } catch (Exception e) {
+           e.printStackTrace();
+       } finally {
+           // Close the browser and quit WebDriver
+           wd.quit();
+       }
+   }
+}
