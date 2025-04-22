@@ -1,0 +1,73 @@
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+public class STQA_P7 {
+   public static void main(String[] args) {
+       System.setProperty("webdriver.chrome.driver","C:\\chromedriver.exe");
+      
+       WebDriver wd = new ChromeDriver();
+       wd.manage().window().maximize();
+       wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+       try {
+           // Open the OrangeHRM login page
+           wd.get("https://opensource-demo.orangehrmlive.com/");
+           // Explicit wait for username field
+           WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(10));
+           WebElement usernameField = wait.until(
+               ExpectedConditions.visibilityOfElementLocated(By.name("username"))
+           );
+           if (usernameField.isDisplayed()) {
+               usernameField.sendKeys("admin");
+           } else {
+               System.out.println("Username field not visible.");
+               return;
+           }
+           // Enter password
+           WebElement passwordField = wd.findElement(By.name("password"));
+           if (passwordField.isDisplayed()) {
+               passwordField.sendKeys("admin123");
+           } else {
+               System.out.println("Password field not visible.");
+               return;
+           }
+           // Click login button
+           WebElement loginButton = wd.findElement(By.cssSelector(".oxd-button.oxd-button--main"));
+           if (loginButton.isEnabled()) {
+               loginButton.click();
+               System.out.println("Login button clicked.");
+           } else {
+               System.out.println("Login button not clickable.");
+               return;
+           }
+           System.out.println("Waiting for profile menu...");
+           // Wait for the "Welcome" dropdown to appear
+           WebElement profileMenu = wait.until(
+               ExpectedConditions.elementToBeClickable(By.cssSelector(".oxd-userdropdown-name"))
+           );
+           if (profileMenu.isDisplayed()) {
+               profileMenu.click();
+               System.out.println("Profile menu clicked.");
+           }
+           // Click "Logout"
+           WebElement logoutButton = wait.until(
+               ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Logout']"))
+           );
+           if (logoutButton.isDisplayed()) {
+               logoutButton.click();
+               System.out.println("Logout successful.");
+           } else {
+               System.out.println("Logout button not found.");
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+       } finally {
+           // Close browser
+           wd.quit();
+       }
+   }
+}
+
