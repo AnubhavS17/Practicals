@@ -1,32 +1,53 @@
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 public class STQA_P8 {
-public static void main(String[] args) throws InterruptedException {
-System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
-WebDriver driver = new ChromeDriver();
-driver.get("http://demo.guru99.com/test/delete_customer.php");
-driver.findElement(By.name("cusid")).sendKeys("5480");
-driver.findElement(By.name("submit")).submit();
-// Switching to Alert
-Alert alert = driver.switchTo().alert();
-// Capturing alert message
-String alertMessage = driver.switchTo().alert().getText();
-// Displaying alert message
-System.out.println(alertMessage);
-Thread.sleep(5000);
-// Accepting alert
-alert.accept();
+   public static void main(String[] args) {
+       // Set system property for the FirefoxDriver
+       System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+       // Initialize the Firefox WebDriver with optional settings
+       FirefoxOptions options = new FirefoxOptions();
+       WebDriver driver = new FirefoxDriver(options);
+       try {
+           // Navigate to the web page
+           driver.get("http://demo.guru99.com/test/delete_customer.php");
+           System.out.println("Navigating to the URL: http://demo.guru99.com/test/delete_customer.php");
+           // Input customer ID and submit the form
+           driver.findElement(By.name("cusid")).sendKeys("5480");
+           driver.findElement(By.name("submit")).submit();
+           System.out.println("Form submitted with Customer ID: 5480");
+           // Wait for the alert to appear using WebDriverWait
+           WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Wait for up to 10 seconds
+           wait.until(ExpectedConditions.alertIsPresent()); // Wait until alert is present
+           // Now switch to the alert
+           Alert alert = driver.switchTo().alert();
+           // Get and print the alert message
+           String alertMessage = alert.getText();
+           System.out.println("Alert message: " + alertMessage);
+           // Add a delay before accepting the alert (for debugging purposes)
+           System.out.println("Waiting for manual review...");
+           Thread.sleep(5000); // Adding sleep to give time for observation (can be adjusted)
+           // Now accept the alert (Ensure it's still present at this moment)
+           try {
+               alert.accept();
+               System.out.println("Alert accepted.");
+           } catch (Exception e) {
+               System.out.println("No alert found or alert already accepted.");
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+       } finally {
+           // Close the browser
+           driver.quit();
+       }
+   }
 }
-}
+
 
 
 
