@@ -1,0 +1,53 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+public class STQA_P4 {
+   public static void main(String[] args) {
+       // Set the path for the ChromeDriver executable
+       System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+      
+       // Initialize WebDriver instance
+       WebDriver driver = new ChromeDriver();
+      
+       try {
+           // Navigate to the application URL
+           String appUrl = "https://en.wikipedia.org/wiki/Main_Page";
+           driver.get(appUrl);
+          
+           // Initialize WebDriverWait with a timeout of 10 seconds
+           WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+          
+           // Wait for and click on the Registration link
+           wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='pt-createaccount-2']/a"))).click();
+          
+           // Wait for 2 seconds
+           Thread.sleep(5000);
+          
+           // Navigate back to Home Page
+           driver.navigate().back();
+           Thread.sleep(5000);
+          
+           // Navigate forward to the Registration page
+           driver.navigate().forward();
+           Thread.sleep(5000);
+          
+           // Navigate back to Home Page
+           driver.navigate().to(appUrl);
+           Thread.sleep(5000);
+          
+           // Refresh the browser
+           driver.navigate().refresh();
+           Thread.sleep(5000);
+          
+       } catch (Exception e) {
+           e.printStackTrace();
+       } finally {
+           // Close the browser
+           driver.quit();
+       }
+   }
+}
+
