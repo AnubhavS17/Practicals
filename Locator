@@ -1,0 +1,69 @@
+import java.time.Duration;
+import java.util.List;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+// import org.openqa.selenium.firefox.FirefoxDriver;
+// Comment the above line and uncomment the below line to use Chrome
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+public class STQA_P6 {
+  
+   public static void main(String[] args) {
+       // Set up WebDriver
+       System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+       WebDriver driver = new ChromeDriver();
+       try {
+           // Open HackerRank login page
+           driver.get("https://www.hackerrank.com/auth/login");
+           System.out.println("HackerRank opened");
+           // Perform login
+           login(driver, "tester.stqa@gmail.com", "tester");
+           System.out.println("Credentials Entered");
+           // Search for a question
+           searchQuestion(driver, "Tower Breakers");
+           System.out.println("Question Searched");
+           // Logout
+           logout(driver);
+           System.out.println("Logged out");
+       } catch (Exception e) {
+           e.printStackTrace();
+       } finally {
+           // Close browser
+           driver.quit();
+       }
+   }
+   // Method to log in
+   private static void login(WebDriver driver, String username, String password) {
+       driver.findElement(By.name("username")).sendKeys(username);
+       driver.findElement(By.cssSelector("input[type=password]")).sendKeys(password);
+       driver.findElement(By.cssSelector("button[data-hr-focus-item='private']")).click();
+       // Wait for login to complete
+       new WebDriverWait(driver, Duration.ofSeconds(6))
+               .until(ExpectedConditions.visibilityOfElementLocated(By.className("profile-menu")));
+   }
+   // Method to search for a question
+   private static void searchQuestion(WebDriver driver, String query) {
+       WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+       // Click search icon if necessary
+       WebElement searchIcon = wait.until(ExpectedConditions.elementToBeClickable(By.className("ui-icon-search")));
+       searchIcon.click();
+       // Now locate the search input field
+       WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input.ac-input")));
+       searchBox.sendKeys("Tower Breakers");
+       // Wait for search results to load and click on the desired question
+       wait.until(ExpectedConditions.elementToBeClickable(
+               By.xpath("/html/body/div[4]/div/div/div/div/div[1]/nav/div/div[2]/ul[1]/li/div/div/div/div[2]/ul/li[8]/div/div")))
+               .click();
+   }
+   // Method to log out
+   private static void logout(WebDriver driver) {
+       WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
+       WebElement profileMenu = wait.until(ExpectedConditions.elementToBeClickable(By.className("profile-menu")));
+       profileMenu.click();
+       WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.className("logout-button")));
+       logoutButton.click();
+   }
+}
